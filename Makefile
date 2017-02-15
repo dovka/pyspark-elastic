@@ -27,12 +27,12 @@ install-elastic-driver: install-venv
 	venv/bin/pip install elasticsearch-dsl
 	
 install-elastic:
-	export URL=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.0/elasticsearch-2.1.0.tar.gz ; \
+	export URL=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/5.2.0/elasticsearch-5.2.0.tar.gz ; \
 	mkdir -p lib ; cd lib ; \
-	test -d elasticsearch-2.1.0 || curl $$URL | tar xz
+	test -d elasticsearch-5.2.0 || curl $$URL | tar xz
 
 start-elastic: install-elastic
-	nohup lib/elasticsearch-2.1.0/bin/elasticsearch > elastic.log 2>&1 & echo $$! > elastic.pid
+	nohup lib/elasticsearch-5.2.0/bin/elasticsearch > elastic.log 2>&1 & echo $$! > elastic.pid
 	
 stop-elastic:
 	kill `cat elastic.pid`
@@ -101,8 +101,8 @@ define test-integration-for-version
 		lib/spark-$1-bin-$2/bin/spark-submit \
 			--master local[*] \
 			--driver-memory 512m \
-			--jars target/scala-2.10/pyspark-elastic-assembly-$(VERSION).jar \
-			--py-files target/scala-2.10/pyspark-elastic-assembly-$(VERSION).jar \
+			--jars target/scala-2.11/pyspark-elastic-assembly-$(VERSION).jar \
+			--py-files target/scala-2.11/pyspark-elastic-assembly-$(VERSION).jar \
 			python/pyspark_elastic/tests.py
 			
 	echo ======================================================================
@@ -114,7 +114,7 @@ dist: clean-pyc
 	sbt assembly
 	cd python ; \
 		find . -mindepth 2 -name '*.py' -print | \
-		zip ../target/scala-2.10/pyspark-elastic-assembly-$(VERSION).jar -@
+		zip ../target/scala-2.11/pyspark-elastic-assembly-$(VERSION).jar -@
 
 
 all: clean dist
@@ -127,11 +127,11 @@ publish: clean
 	# push the python source files into the jar
 	cd python ; \
 		find . -mindepth 2 -name '*.py' -print | \
-		zip ../target/scala-2.10/pyspark-elastic_2.10-$(VERSION).jar -@
+		zip ../target/scala-2.11/pyspark-elastic_2.11-$(VERSION).jar -@
 
 	# copy it to the right name, and update the jar in the zip
-	cp target/scala-2.10/pyspark-elastic{_2.10,}-$(VERSION).jar
-	cd target/scala-2.10 ;\
+	cp target/scala-2.11/pyspark-elastic{_2.11,}-$(VERSION).jar
+	cd target/scala-2.11 ;\
 		zip ../pyspark-elastic-$(VERSION).zip pyspark-elastic-$(VERSION).jar
 
 	# send the package to spark-packages
