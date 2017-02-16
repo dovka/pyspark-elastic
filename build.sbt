@@ -11,7 +11,7 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".sbtcredentials")
 licenses += "Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0") 
 
 libraryDependencies ++= Seq(
-   	"org.elasticsearch" %% "elasticsearch-spark-20" % "5.2.0"
+   	"org.elasticsearch" %% "elasticsearch-spark-20" % "5.2.1"
 exclude("org.glassfish.hk2.external", "javax.inject")
 exclude("org.glassfish.hk2.external", "aopalliance-repackaged")
 )
@@ -48,7 +48,7 @@ assemblyExcludedJars in assembly := {
 }
 
 EclipseKeys.withSource := true
-val path = "/home/davidka/prems/dockerfiles/spark/pyspark-util/target/scala-2.11/pyspark-utils_2.11-0.0.1.jar"
+val path = "../pyspark-util/target/scala-2.11/pyspark-utils_2.11-0.0.2.jar"
 unmanagedClasspath in Compile += file(path)
 unmanagedClasspath in Runtime += file(path)
 
